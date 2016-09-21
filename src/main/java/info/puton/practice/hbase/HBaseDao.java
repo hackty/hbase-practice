@@ -18,15 +18,15 @@ import org.apache.hadoop.hbase.util.Bytes;
  */
 public class HBaseDao {
 
-
     static Configuration conf = HBaseConfiguration.create();
+
     /**
      * create a table :table_name(columnFamily)
      * @param tableName
      * @param columnFamily
      * @throws Exception
      */
-    public static void createTable(String tableName, String columnFamily) throws Exception {
+    public void createTable(String tableName, String columnFamily) throws Exception {
         HBaseAdmin admin = new HBaseAdmin(conf);
         if(admin.tableExists(tableName)) {
             System.out.println("Table exists!");
@@ -48,7 +48,7 @@ public class HBaseDao {
      * @return
      * @throws Exception
      */
-    public static boolean deleteTable(String tableName) throws Exception {
+    public boolean deleteTable(String tableName) throws Exception {
         HBaseAdmin admin = new HBaseAdmin(conf);
         if(admin.tableExists(tableName)) {
             try {
@@ -74,7 +74,7 @@ public class HBaseDao {
      * @param data
      * @throws Exception
      */
-    public static void putCell(HTable table, String rowKey, String columnFamily, String qualifier, byte[] data) throws Exception{
+    public void putCell(HTable table, String rowKey, String columnFamily, String qualifier, byte[] data) throws Exception{
         Put p1 = new Put(Bytes.toBytes(rowKey));
         p1.add(Bytes.toBytes(columnFamily), Bytes.toBytes(qualifier), data);
         table.put(p1);
@@ -89,7 +89,7 @@ public class HBaseDao {
      * @param data
      * @throws Exception
      */
-    public static void putCell(HTable table, String rowKey, String columnFamily, String qualifier, String data) throws Exception{
+    public void putCell(HTable table, String rowKey, String columnFamily, String qualifier, String data) throws Exception{
         putCell(table, rowKey, columnFamily, qualifier, Bytes.toBytes(data));
         System.out.println("put '"+rowKey+"', '"+columnFamily+":"+qualifier+"', '"+data+"'");
     }
@@ -103,7 +103,7 @@ public class HBaseDao {
      * @param data
      * @throws Exception
      */
-    public static void putCell(String tableName, String rowKey, String columnFamily, String qualifier, byte[] data) throws Exception{
+    public void putCell(String tableName, String rowKey, String columnFamily, String qualifier, byte[] data) throws Exception{
         HTable table = new HTable(conf, tableName);
         putCell(table, rowKey, columnFamily, qualifier, data);
     }
@@ -117,7 +117,7 @@ public class HBaseDao {
      * @param data
      * @throws Exception
      */
-    public static void putCell(String tableName, String rowKey, String columnFamily, String qualifier, String data) throws Exception{
+    public void putCell(String tableName, String rowKey, String columnFamily, String qualifier, String data) throws Exception{
         putCell(tableName, rowKey, columnFamily, qualifier, Bytes.toBytes(data));
     }
 
@@ -127,7 +127,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static Result getRow(HTable table, String rowKey) throws Exception {
+    public Result getRow(HTable table, String rowKey) throws Exception {
         Get get = new Get(Bytes.toBytes(rowKey));
         Result result = table.get(get);
         System.out.println("Get: "+result);
@@ -140,7 +140,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static Result getRow(String tableName, String rowKey) throws Exception {
+    public Result getRow(String tableName, String rowKey) throws Exception {
         HTable table = new HTable(conf, tableName);
         return getRow(table, rowKey);
     }
@@ -151,7 +151,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static byte[] getBytesCell(HTable table, String rowKey, String columnFamily, String qualifier) throws Exception {
+    public byte[] getBytesCell(HTable table, String rowKey, String columnFamily, String qualifier) throws Exception {
         Result r = getRow(table, rowKey);
         byte[] bytes = r.getValue(Bytes.toBytes(columnFamily), Bytes.toBytes(qualifier));
         return bytes;
@@ -163,7 +163,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static byte[] getBytesCell(String tableName, String rowKey, String columnFamily, String qualifier) throws Exception {
+    public byte[] getBytesCell(String tableName, String rowKey, String columnFamily, String qualifier) throws Exception {
         HTable table = new HTable(conf, tableName);
         return getBytesCell(table, rowKey, columnFamily, qualifier);
     }
@@ -174,7 +174,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static String getStringCell(String tableName, String rowKey, String columnFamily, String qualifier) throws Exception {
+    public String getStringCell(String tableName, String rowKey, String columnFamily, String qualifier) throws Exception {
         byte[] bytes = getBytesCell(tableName, rowKey, columnFamily, qualifier);
         return new String(bytes,"utf-8");
     }
@@ -185,7 +185,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static void deleteRow(HTable table, String rowKey) throws Exception {
+    public void deleteRow(HTable table, String rowKey) throws Exception {
         Delete delete = new Delete(Bytes.toBytes(rowKey));
         table.delete(delete);
         System.out.println("Delete row: "+rowKey);
@@ -197,7 +197,7 @@ public class HBaseDao {
      * @param rowKey
      * @throws Exception
      */
-    public static void deleteRow(String tableName, String rowKey) throws Exception {
+    public void deleteRow(String tableName, String rowKey) throws Exception {
         HTable table = new HTable(conf, tableName);
         deleteRow(table, rowKey);
     }
@@ -207,7 +207,7 @@ public class HBaseDao {
      * @param table, create by : HTable table = new HTable(conf, "tableName")
      * @throws Exception
      */
-    public static ResultScanner scanAll(HTable table) throws Exception {
+    public ResultScanner scanAll(HTable table) throws Exception {
         Scan s =new Scan();
         ResultScanner rs = table.getScanner(s);
         return rs;
@@ -218,7 +218,7 @@ public class HBaseDao {
      * @param tableName
      * @throws Exception
      */
-    public static ResultScanner scanAll(String tableName) throws Exception {
+    public ResultScanner scanAll(String tableName) throws Exception {
         HTable table = new HTable(conf, tableName);
         return scanAll(table);
     }
@@ -230,7 +230,7 @@ public class HBaseDao {
      * @param endRow
      * @throws Exception
      */
-    public static ResultScanner scanRange(HTable table, String startRow, String endRow) throws Exception {
+    public ResultScanner scanRange(HTable table, String startRow, String endRow) throws Exception {
         Scan s =new Scan(Bytes.toBytes(startRow),Bytes.toBytes(endRow));
         ResultScanner rs = table.getScanner(s);
         return rs;
@@ -243,7 +243,7 @@ public class HBaseDao {
      * @param endRow
      * @throws Exception
      */
-    public static ResultScanner scanRange(String tableName, String startRow, String endRow) throws Exception {
+    public ResultScanner scanRange(String tableName, String startRow, String endRow) throws Exception {
         HTable table = new HTable(conf, tableName);
         return scanRange(table, startRow, endRow);
     }
@@ -255,7 +255,7 @@ public class HBaseDao {
      * @param filter
      * @throws Exception
      */
-    public static ResultScanner scanFilter(HTable table, String startRow, Filter filter) throws Exception {
+    public ResultScanner scanFilter(HTable table, String startRow, Filter filter) throws Exception {
         Scan s =new Scan(Bytes.toBytes(startRow),filter);
         ResultScanner rs = table.getScanner(s);
         return rs;
@@ -268,7 +268,7 @@ public class HBaseDao {
      * @param filter
      * @throws Exception
      */
-    public static ResultScanner scanFilter(String tableName, String startRow, Filter filter) throws Exception {
+    public ResultScanner scanFilter(String tableName, String startRow, Filter filter) throws Exception {
         HTable table = new HTable(conf, tableName);
         return scanFilter(table, startRow, filter);
     }
@@ -276,24 +276,26 @@ public class HBaseDao {
     public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
 
+        HBaseDao hbd = new HBaseDao();
+
         HTable table = new HTable(conf, "test_tb");
-//        ResultScanner rs = HBaseDao.scanRange("test_tb", "2013-07-10*", "2013-07-11*");
-        ResultScanner rs = HBaseDao.scanRange("test_tb", "100001", "100004");
-//        ResultScanner rs = HBaseDao.scanAll("test_tb");
+//        ResultScanner rs = hbd.scanRange("test_tb", "2013-07-10*", "2013-07-11*");
+        ResultScanner rs = hbd.scanRange("test_tb", "100001", "100004");
+//        ResultScanner rs = hbd.scanAll("test_tb");
         for(Result r:rs) {
             System.out.println("Scan: " + r);
         }
         table.close();
 
-//        HBaseDao.createTable("test_tb", "test_cf");
-//        HBaseDao.putCell("test_tb", "100001", "test_cf", "name", "yang");
-//        HBaseDao.putCell("test_tb", "100002", "test_cf", "name", "bolin");
-//        HBaseDao.putCell("test_tb", "100003", "test_cf", "name", "阳");
-//        HBaseDao.putCell("test_tb", "100004", "test_cf", "name", "波琳");
-//        HBaseDao.deleteRow("test_tb", "100003");
-//        HBaseDao.getRow("test_tb", "100004");
-//        System.out.println(HBaseDao.getStringCell("test_tb", "100004", "test_cf", "name"));
-//        HBaseDao.deleteTable("test_tb");
+//        hbd.createTable("test_tb", "test_cf");
+//        hbd.putCell("test_tb", "100001", "test_cf", "name", "yang");
+//        hbd.putCell("test_tb", "100002", "test_cf", "name", "bolin");
+//        hbd.putCell("test_tb", "100003", "test_cf", "name", "阳");
+//        hbd.putCell("test_tb", "100004", "test_cf", "name", "波琳");
+//        hbd.deleteRow("test_tb", "100003");
+//        hbd.getRow("test_tb", "100004");
+//        System.out.println(hbd.getStringCell("test_tb", "100004", "test_cf", "name"));
+//        hbd.deleteTable("test_tb");
 
     }
 
