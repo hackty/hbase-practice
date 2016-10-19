@@ -62,9 +62,9 @@ public class HBaseFileOperator {
 
             String filePath = "D:/programming/java/practice/hbase-practice/src/main/resources/一碗阳春面.docx";
 
-//            putFile(filePath, "a00002");
+//            hbfo.putFile(filePath, "a00002");
 
-            hbfo.getFile("E:/tmp/yang", "a00002");
+            hbfo.getFile("E:/tmp/haha", "a00002");
 
         } catch (Exception e) {
             e.printStackTrace();

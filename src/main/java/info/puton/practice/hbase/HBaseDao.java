@@ -287,7 +287,7 @@ public class HBaseDao {
         }
         table.close();
 
-//        hbd.createTable("test_tb", "test_cf");
+        hbd.createTable("test_tb", "test_cf");
 //        hbd.putCell("test_tb", "100001", "test_cf", "name", "yang");
 //        hbd.putCell("test_tb", "100002", "test_cf", "name", "bolin");
 //        hbd.putCell("test_tb", "100003", "test_cf", "name", "阳");
